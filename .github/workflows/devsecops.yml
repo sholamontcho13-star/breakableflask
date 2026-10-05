@@ -33,6 +33,11 @@ jobs:
     needs: Dockerfile
 
     steps:
-      - name: Deploy
-        run: |
-          echo "Rien à faire ici. Votre application est prête à être déployée"
+      - name: Scan des dépendances avec Trivy
+  uses: aquasecurity/trivy-action@v0.36.0
+  with:
+    scan-type: 'fs'
+    scan-ref: '.'
+    scanners: 'vuln'
+    severity: 'HIGH,CRITICAL'
+    exit-code: '1'
