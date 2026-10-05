@@ -17,16 +17,20 @@ jobs:
           echo "Contrôle des dépendances"
 
   Dockerfile:
-    runs-on: ubuntu-latest
-    needs: Dependances
+  runs-on: ubuntu-latest
+  needs: Dependances
 
-    steps:
-      - name: Checkout du repository
-        uses: actions/checkout@v4
+  steps:
+    - name: Checkout du repository
+      uses: actions/checkout@v4
 
-      - name: Test Dockerfile
-        run: |
-          echo "Contrôle du Dockerfile"
+    - name: Scan du Dockerfile avec Trivy
+      uses: aquasecurity/trivy-action@v0.36.0
+      with:
+        scan-type: 'config'
+        scan-ref: 'Dockerfile'
+        severity: 'HIGH,CRITICAL'
+        exit-code: '1'
 
   Deploy:
     runs-on: ubuntu-latest
